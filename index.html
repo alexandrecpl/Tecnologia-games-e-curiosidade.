@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101319">
+  <meta name="description" content="Uma coleção visual de programação, games e tecnologia.">
+  <title>Meu universo digital — Programação, games e tecnologia</title>
+  <style>
+    /*
+      Guia rápido: o seletor escolhe elementos e as declarações ficam entre { }.
+      "." seleciona uma classe; ":" indica um estado (como :hover, ao passar o mouse).
+      margin é o espaço fora do elemento; padding é o espaço dentro dele.
+      px é uma medida fixa; rem acompanha o tamanho de fonte da página; vw é % da largura da tela.
+      var(--nome) reutiliza uma variável. Em rgb(... / 50%), o valor após "/" é a transparência.
+    */
+    /* :root representa a página inteira; variáveis (--nome) guardam valores reutilizáveis. */
+    :root {
+      color-scheme: dark; /* Informa ao navegador que a página usa uma interface escura. */
+      --fundo: #101319;
+      --superficie: #181c24;
+      --superficie-clara: #202530;
+      --texto: #f4f3ef;
+      --texto-suave: #a4a9b5;
+      --linha: rgb(255 255 255 / 10%);
+      --destaque: #b6f36a;
+      --destaque-escuro: #1d2716;
+      --raio: 18px; /* Variável de exemplo para um arredondamento consistente. */
+    }
+
+    /* O asterisco seleciona todos os elementos; ::before e ::after são partes extras do elemento. */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box; /* Largura e altura passam a incluir conteúdo, borda e espaçamento interno. */
+    }
+
+    html {
+      scroll-behavior: smooth; /* Faz a rolagem até links internos acontecer suavemente. */
+    }
+
+    body {
+      min-height: 100vh; /* 100vh equivale à altura visível da janela; aqui é a altura mínima. */
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 75% -20%, rgb(79 103 144 / 17%), transparent 42rem), /* Degradê circular suave por cima do fundo. */
+        var(--fundo);
+      color: var(--texto);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.6; /* Altura entre linhas, multiplicada pelo tamanho da fonte. */
+    }
+
+    button,
+    textarea {
+      font: inherit; /* Usa a mesma fonte e estilo de texto herdados da página. */
+    }
+
+    button {
+      color: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none; /* Remove o sublinhado padrão dos links. */
+    }
+
+    .container {
+      width: min(1160px, calc(100% - 48px)); /* Limita a largura e mantém 24px de espaço em cada lado. */
+      margin: 0 auto; /* Margens automáticas iguais centralizam o bloco. */
+    }
+
+    .topo {
+      position: relative; /* Cria referência para posicionar elementos internos. */
+      z-index: 2; /* Define a ordem de sobreposição; número maior fica mais à frente. */
+      border-bottom: 1px solid var(--linha);
+      background: rgb(16 19 25 / 75%);
+    }
+
+    .topo-conteudo {
+      display: flex; /* Ativa Flexbox para organizar os itens em linha. */
+      min-height: 76px;
+      align-items: center; /* Alinha os itens no centro do eixo vertical. */
+      justify-content: space-between; /* Coloca o primeiro item à esquerda e o último à direita. */
+      gap: 24px;
+    }
+
+    .marca {
+      display: inline-flex; /* Flexbox que ocupa apenas o espaço necessário. */
+      align-items: center;
+      gap: 11px;
+      font-size: 0.96rem;
+      font-weight: 750;
+      letter-spacing: -0.02em; /* Ajusta o espaço entre letras; em usa o tamanho da fonte. */
+    }
+
+    .marca-icone {
+      display: grid; /* Ativa CSS Grid; place-items centraliza o conteúdo nos dois eixos. */
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      border-radius: 11px; /* Arredonda os cantos; 50% deixaria o ícone circular. */
+      background: var(--destaque);
+      color: #172010;
+      font-size: 1.05rem;
+    }
+
+    .navegacao {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+    }
+
+    .navegacao a:hover,
+    .navegacao a:focus-visible {
+      color: var(--destaque);
+    }
+
+    .hero {
+      padding: 66px 0 43px;
+    }
+
+    .hero-intro {
+      display: flex;
+      align-items: flex-end; /* Alinha os itens pela parte inferior. */
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 26px;
+    }
+
+    .rotulo {
+      margin: 0 0 10px;
+      color: var(--destaque);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin-bottom: 12px;
+      font-size: clamp(2.4rem, 6vw, 4.65rem); /* Tamanho responsivo: mínimo, preferido e máximo. */
+      font-weight: 750;
+      letter-spacing: -0.065em;
+      line-height: 0.99;
+    }
+
+    h1 span {
+      color: var(--destaque);
+    }
+
+    .descricao-topo {
+      max-width: 540px;
+      margin-bottom: 0;
+      color: var(--texto-suave);
+      font-size: 1rem;
+    }
+
+    .contador {
+      flex: 0 0 auto; /* No Flexbox, impede que o contador encolha ou cresça. */
+      margin: 0 0 4px;
+      color: var(--texto-suave);
+      font-size: 0.88rem;
+    }
+
+    .contador strong {
+      color: var(--texto);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .categorias {
+      display: flex;
+      flex-wrap: wrap; /* Permite que os filtros passem para outra linha se faltar espaço. */
+      gap: 9px; /* Espaço entre os itens do Flexbox ou do Grid. */
+      margin-bottom: 20px;
+    }
+
+    .filtro {
+      padding: 8px 14px;
+      border: 1px solid var(--linha);
+      border-radius: 999px; /* Valor alto deixa o botão em formato de pílula. */
+      background: transparent;
+      color: var(--texto-suave);
+      cursor: pointer; /* Mostra a mãozinha para indicar que o item pode ser clicado. */
+      font-size: 0.84rem;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease; /* Anima mudanças de cor em 160 milissegundos. */
+    }
+
+    .filtro:hover {
+      border-color: rgb(182 243 106 / 50%);
+      color: var(--texto);
+    }
+
+    .filtro[aria-pressed="true"] {
+      /* Colchetes selecionam elementos pelo atributo; aqui, o filtro que está ativo. */
+      border-color: var(--destaque);
+      background: var(--destaque-escuro);
+      color: var(--destaque);
+    }
+
+    /* A área principal funciona como palco do slide atual do carrossel. */
+    .carrossel {
+      position: relative; /* Serve de referência para os elementos posicionados dentro do carrossel. */
+      overflow: hidden; /* Esconde tudo que ultrapassa os limites arredondados. */
+      min-height: 490px;
+      border: 1px solid var(--linha);
+      border-radius: 24px;
+      background: #171b23;
+      isolation: isolate; /* Mantém a ordem das camadas deste carrossel separada do restante da página. */
+    }
+
+    .imagem-slide {
+      position: absolute; /* Retira a imagem do fluxo normal e permite sobrepô-la ao carrossel. */
+      z-index: -2; /* Envia a imagem para trás do texto e da camada escura. */
+      inset: 0; /* Atalho para top, right, bottom e left: prende a imagem às quatro bordas. */
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Preenche a área sem deformar a imagem; pode cortar um pouco das bordas. */
+      object-position: center; /* Escolhe o centro da imagem como ponto de corte. */
+      animation: revelar 500ms ease both; /* Executa a animação "revelar" por 500ms. */
+    }
+
+    /* ::after cria uma camada decorativa; o degradê escuro mantém os textos legíveis. */
+    .carrossel::after {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgb(9 11 15 / 91%) 0%, rgb(9 11 15 / 69%) 43%, rgb(9 11 15 / 8%) 100%), /* Degradê da esquerda para a direita; porcentagens indicam transparência e posição. */
+        linear-gradient(0deg, rgb(9 11 15 / 60%), transparent 42%);
+      content: ""; /* Obrigatório para que o pseudo-elemento ::after apareça. */
+    }
+
+    .conteudo-slide {
+      display: flex;
+      min-height: 490px;
+      flex-direction: column; /* Empilha os itens do slide verticalmente. */
+      align-items: flex-start;
+      justify-content: flex-end; /* Encosta o conteúdo na parte inferior do carrossel. */
+      padding: clamp(26px, 6vw, 65px); /* Espaçamento interno que aumenta ou diminui conforme a tela. */
+      animation: subir 400ms ease both;
+    }
+
+    .etiqueta-slide {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      padding: 6px 11px;
+      border: 1px solid rgb(182 243 106 / 40%);
+      border-radius: 999px;
+      background: rgb(19 27 16 / 70%);
+      color: var(--destaque);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .etiqueta-slide::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%; /* Metade do tamanho transforma o pequeno elemento em círculo. */
+      background: currentColor;
+      /* currentColor reaproveita o valor definido em "color" no próprio elemento. */
+      content: "";
+    }
+
+    .conteudo-slide h2 {
+      max-width: 620px;
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 5vw, 3.65rem); /* Adapta o título à largura, sem passar dos limites definidos. */
+      font-weight: 750;
+      letter-spacing: -0.055em;
+      line-height: 1.02;
+    }
+
+    .conteudo-slide p {
+      max-width: 520px;
+      margin-bottom: 0;
+      color: rgb(244 243 239 / 82%);
+      font-size: clamp(0.94rem, 2vw, 1.08rem);
+    }
+
+    .controles {
+      position: absolute; /* Permite posicionar os botões em relação ao carrossel. */
+      right: 24px;
+      bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .controle {
+      display: grid;
+      width: 45px;
+      height: 45px;
+      place-items: center;
+      border: 1px solid rgb(255 255 255 / 25%);
+      border-radius: 50%; /* Faz o botão ficar redondo. */
+      background: rgb(13 16 21 / 70%);
+      cursor: pointer;
+      font-size: 1.15rem;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease; /* Suaviza cor, borda e movimento ao interagir. */
+    }
+
+    .controle:hover {
+      transform: translateY(-2px); /* Move o botão 2px para cima quando o mouse passa sobre ele. */
+      border-color: var(--destaque);
+      background: rgb(25 34 19 / 95%);
+    }
+
+    .indicadores {
+      position: absolute;
+      bottom: 43px;
+      left: clamp(26px, 6vw, 65px); /* Distância responsiva a partir da borda esquerda. */
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .indicador {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: 0;
+      border-radius: 99px;
+      background: rgb(255 255 255 / 42%);
+      cursor: pointer;
+      transition: width 180ms ease, background 180ms ease; /* Faz a largura e a cor mudarem suavemente. */
+    }
+
+    .indicador[aria-current="true"] {
+      width: 25px;
+      background: var(--destaque);
+    }
+
+    .miniaturas {
+      display: grid; /* Organiza as miniaturas em uma grade. */
+      grid-template-columns: repeat(6, minmax(0, 1fr)); /* 6 colunas iguais; minmax evita que o conteúdo force a largura. */
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .miniatura {
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      aspect-ratio: 16 / 9; /* Mantém cada miniatura na proporção widescreen (16:9). */
+      padding: 0;
+      border: 1px solid var(--linha);
+      border-radius: 12px;
+      background: var(--superficie);
+      cursor: pointer;
+      opacity: 0.63; /* Controla a transparência; 1 é totalmente opaco e 0 invisível. */
+      transition: opacity 160ms ease, border-color 160ms ease, transform 160ms ease; /* Anima transparência, borda e posição. */
+    }
+
+    .miniatura:hover {
+      transform: translateY(-2px);
+      opacity: 0.92;
+    }
+
+    .miniatura[aria-current="true"] {
+      border: 2px solid var(--destaque);
+      opacity: 1;
+    }
+
+    .miniatura img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .miniatura span {
+      position: absolute; /* Posiciona o rótulo em relação à miniatura (position: relative). */
+      right: 5px;
+      bottom: 5px;
+      left: 5px;
+      overflow: hidden;
+      padding: 3px 6px;
+      border-radius: 5px;
+      background: rgb(10 12 16 / 72%);
+      font-size: 0.65rem;
+      text-overflow: ellipsis; /* Mostra reticências se o texto não couber. */
+      white-space: nowrap; /* Impede que o rótulo quebre para outra linha. */
+    }
+
+    .secao-estudo {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(300px, 1.2fr); /* Duas colunas proporcionais; a segunda nunca fica menor que 300px. */
+      gap: 36px;
+      align-items: start; /* Alinha os itens ao início (topo) de suas células. */
+      margin: 76px 0 60px;
+      padding-top: 35px;
+      border-top: 1px solid var(--linha);
+    }
+
+    .secao-estudo h2 {
+      margin-bottom: 11px;
+      font-size: clamp(1.7rem, 3vw, 2.25rem);
+      letter-spacing: -0.045em;
+      line-height: 1.1;
+    }
+
+    .secao-estudo .texto-apoio {
+      max-width: 400px;
+      margin-bottom: 0;
+      color: var(--texto-suave);
+    }
+
+    .anotacoes {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical; /* Permite ao usuário redimensionar a caixa apenas para cima/baixo. */
+      padding: 15px 16px;
+      border: 1px solid var(--linha);
+      border-radius: 13px;
+      background: var(--superficie);
+      color: var(--texto);
+      line-height: 1.6;
+    }
+
+    .anotacoes::placeholder {
+      color: #808692;
+    }
+
+    .estado-anotacoes {
+      min-height: 22px;
+      margin: 7px 0 0;
+      color: var(--texto-suave);
+      font-size: 0.78rem;
+    }
+
+    .rodape {
+      padding: 22px 0 28px;
+      border-top: 1px solid var(--linha);
+      color: var(--texto-suave);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    :focus-visible {
+      /* Destaque de acessibilidade mostrado ao navegar usando teclado. */
+      outline: 3px solid var(--destaque);
+      outline-offset: 3px; /* Afasta o contorno do elemento para deixá-lo mais visível. */
+    }
+
+    /* @keyframes define os passos de uma animação, de "from" (início) até "to" (fim). */
+    @keyframes revelar {
+      from { opacity: 0.55; transform: scale(1.015); } /* Começa um pouco transparente e ampliada. */
+      to { opacity: 1; transform: scale(1); } /* Termina opaca no tamanho normal. */
+    }
+
+    @keyframes subir {
+      from { opacity: 0; transform: translateY(9px); } /* Começa invisível e 9px abaixo. */
+      to { opacity: 1; transform: translateY(0); } /* Termina visível na posição original. */
+    }
+
+    /* @media aplica regras somente quando a condição entre parênteses é verdadeira. */
+    @media (max-width: 760px) {
+      .hero {
+        padding-top: 48px;
+      }
+
+      .hero-intro {
+        align-items: flex-start;
+        flex-direction: column; /* Em telas menores, coloca os itens um abaixo do outro. */
+        gap: 15px;
+      }
+
+      .carrossel,
+      .conteudo-slide {
+        min-height: 430px;
+      }
+
+      .carrossel::after {
+        background:
+          linear-gradient(0deg, rgb(9 11 15 / 94%) 0%, rgb(9 11 15 / 45%) 65%, rgb(9 11 15 / 12%) 100%),
+          linear-gradient(90deg, rgb(9 11 15 / 30%), transparent);
+      }
+
+      .conteudo-slide {
+        justify-content: flex-end;
+        padding-bottom: 105px;
+      }
+
+      .indicadores {
+        bottom: 42px;
+      }
+
+      .controles {
+        bottom: 24px;
+      }
+
+      .miniaturas {
+        grid-template-columns: repeat(4, minmax(0, 1fr)); /* Reduz para 4 colunas em telas médias. */
+      }
+
+      .secao-estudo {
+        grid-template-columns: 1fr; /* Troca as duas colunas por uma única coluna. */
+        gap: 20px;
+        margin-top: 58px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: min(1160px, calc(100% - 30px));
+      }
+
+      .topo-conteudo {
+        min-height: 66px;
+      }
+
+      .navegacao {
+        gap: 15px;
+        font-size: 0.82rem;
+      }
+
+      .marca {
+        font-size: 0.86rem;
+      }
+
+      .marca-icone {
+        width: 31px;
+        height: 31px;
+      }
+
+      .carrossel,
+      .conteudo-slide {
+        min-height: 410px;
+      }
+
+      .conteudo-slide {
+        padding: 24px 20px 105px;
+      }
+
+      .controles {
+        right: 17px;
+      }
+
+      .controle {
+        width: 41px;
+        height: 41px;
+      }
+
+      .indicadores {
+        left: 20px;
+      }
+
+      .miniaturas {
+        grid-template-columns: repeat(3, minmax(0, 1fr)); /* Em celulares, exibe 3 miniaturas por linha. */
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      /* Respeita a preferência do sistema por menos animações e movimentos. */
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important; /* Desativa rolagem suave. */
+        animation-duration: 0.01ms !important; /* Quase elimina a duração das animações. */
+        transition-duration: 0.01ms !important; /* Quase elimina as transições. */
+        /* !important dá prioridade a estas regras sobre outras declarações conflitantes. */
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topo">
+    <div class="container topo-conteudo">
+      <a class="marca" href="#inicio" aria-label="Ir para o início">
+        <span class="marca-icone" aria-hidden="true">&lt;/&gt;</span>
+        <span>Meu universo digital</span>
+      </a>
+      <nav class="navegacao" aria-label="Navegação principal">
+        <a href="#inicio">Início</a>
+        <a href="#observacoes">Minhas obs.</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero" id="inicio">
+      <div class="hero-intro">
+        <div>
+          <p class="rotulo">Minha coleção visual</p>
+          <h1>Tecnologia, games<br>e <span>curiosidade.</span></h1>
+          <p class="descricao-topo">
+            Um carrossel com as imagens que fazem parte dos meus estudos e interesses.
+            Use as categorias para explorar cada tema.
+          </p>
+        </div>
+        <p class="contador" aria-live="polite">
+          Imagem <strong id="numero-atual">01</strong> de <strong id="total-imagens">00</strong>
+        </p>
+      </div>
+
+      <div class="categorias" role="group" aria-label="Filtrar imagens por tema">
+        <button class="filtro" type="button" data-categoria="todas" aria-pressed="true">Todas</button>
+        <button class="filtro" type="button" data-categoria="programacao" aria-pressed="false">Programação</button>
+        <button class="filtro" type="button" data-categoria="games" aria-pressed="false">Games</button>
+        <button class="filtro" type="button" data-categoria="cripto" aria-pressed="false">Cripto</button>
+        <button class="filtro" type="button" data-categoria="tecnologia" aria-pressed="false">Tecnologia</button>
+        <button class="filtro" type="button" data-categoria="pessoal" aria-pressed="false">Pessoal</button>
+      </div>
+
+      <section class="carrossel" aria-label="Carrossel de imagens">
+        <img class="imagem-slide" id="imagem-slide" src="" alt="">
+        <div class="conteudo-slide" id="conteudo-slide" aria-live="polite">
+          <span class="etiqueta-slide" id="etiqueta-slide"></span>
+          <h2 id="titulo-slide"></h2>
+          <p id="descricao-slide"></p>
+        </div>
+        <div class="indicadores" id="indicadores" aria-label="Escolher imagem"></div>
+        <div class="controles">
+          <button class="controle" id="anterior" type="button" aria-label="Ver imagem anterior">←</button>
+          <button class="controle" id="proximo" type="button" aria-label="Ver próxima imagem">→</button>
+        </div>
+      </section>
+
+      <div class="miniaturas" id="miniaturas" aria-label="Pré-visualizações das imagens"></div>
+    </section>
+
+    <section class="container secao-estudo" id="observacoes">
+      <div>
+        <p class="rotulo">Espaço de estudo</p>
+        <h2>Obs. — Minhas anotações</h2>
+        <p class="texto-apoio">
+          Registre ideias, referências e o que você aprendeu. Suas anotações ficam salvas
+          neste navegador.
+        </p>
+      </div>
+      <div>
+        <label for="anotacoes">Suas observações</label>
+        <textarea
+          class="anotacoes"
+          id="anotacoes"
+          placeholder="Ex.: Quero pesquisar mais sobre HTML, JavaScript e criação de jogos..."
+        ></textarea>
+        <p class="estado-anotacoes" id="estado-anotacoes" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container rodape">
+    Feito para explorar, estudar e aprender praticando.
+  </footer>
+
+  <script>
+    // Cada objeto representa um slide: caminho da imagem, tema, título e descrição.
+    // A segunda imagem idêntica de Bitcoin foi mantida na pasta, mas aparece uma vez no carrossel.
+    const imagens = [
+      {
+        arquivo: "tecnologia-futuro.jpg",
+        tema: "tecnologia",
+        categoria: "Tecnologia",
+        titulo: "Um olhar para o futuro",
+        descricao: "Tecnologia e inovação inspiram novas ideias e possibilidades.",
+        alt: "Cenário futurista de tecnologia com luzes azuis e alaranjadas."
+      },
+      {
+        arquivo: "programacao-linguagens.jpg",
+        tema: "programacao",
+        categoria: "Programação",
+        titulo: "O universo da programação",
+        descricao: "Linguagens, ferramentas e conceitos que ajudam a transformar ideias em projetos.",
+        alt: "Nomes de linguagens e tecnologias de programação sobre um fundo de código."
+      },
+      {
+        arquivo: "programacao-html.jpg",
+        tema: "programacao",
+        categoria: "Programação",
+        titulo: "Aprendendo HTML",
+        descricao: "HTML organiza o conteúdo e cria a estrutura das páginas da internet.",
+        alt: "Pessoa estudando HTML em um notebook."
+      },
+      {
+        arquivo: "programacao-estudo.jpg",
+        tema: "programacao",
+        categoria: "Programação",
+        titulo: "Praticar também é aprender",
+        descricao: "Um pouco de prática todos os dias ajuda a desenvolver novas habilidades.",
+        alt: "Mãos digitando em um notebook iluminado por luzes coloridas."
+      },
+      {
+        arquivo: "tecnologias-web.jpg",
+        tema: "programacao",
+        categoria: "Programação",
+        titulo: "Tecnologias para a web",
+        descricao: "HTML, CSS e JavaScript trabalham juntos para criar páginas interativas.",
+        alt: "Símbolos de tecnologias web em três escudos coloridos."
+      },
+      {
+        arquivo: "windows-xp.jpg",
+        tema: "tecnologia",
+        categoria: "Tecnologia",
+        titulo: "Uma viagem pela história do Windows",
+        descricao: "Uma lembrança de uma época marcante na história dos computadores pessoais.",
+        alt: "Logotipo clássico do Windows XP cercado por efeitos de energia azul."
+      },
+      {
+        arquivo: "games-star-wars.jpg",
+        tema: "games",
+        categoria: "Games",
+        titulo: "Uma galáxia de possibilidades",
+        descricao: "Universos de ficção científica ganham vida por meio dos jogos.",
+        alt: "Fileira de capacetes de personagens de Star Wars em uma cena espacial."
+      },
+      {
+        arquivo: "games-controle.jpg",
+        tema: "games",
+        categoria: "Games",
+        titulo: "A emoção dos videogames",
+        descricao: "Controles, desafios e histórias fazem parte da experiência de jogar.",
+        alt: "Controle de videogame escuro em uma composição artística."
+      },
+      {
+        arquivo: "games-retro.jpg",
+        tema: "games",
+        categoria: "Games",
+        titulo: "O charme dos jogos retrô",
+        descricao: "Visuais clássicos continuam inspirando jogadores e desenvolvedores.",
+        alt: "Cena abstrata de blocos pretos com detalhes luminosos vermelhos."
+      },
+      {
+        arquivo: "games-mario.jpg",
+        tema: "games",
+        categoria: "Games",
+        titulo: "Personagens que marcaram gerações",
+        descricao: "Mario é um dos personagens mais conhecidos da história dos videogames.",
+        alt: "Mario em pose de ação diante de um cenário iluminado."
+      },
+      {
+        arquivo: "games-anime.jpg",
+        tema: "games",
+        categoria: "Games",
+        titulo: "Heróis de diferentes universos",
+        descricao: "Personagens de anime se encontram em uma aventura de luta.",
+        alt: "Personagens de anime reunidos em uma cena urbana de ação."
+      },
+      {
+        arquivo: "games-jump-force.jpg",
+        tema: "games",
+        categoria: "Games",
+        titulo: "Ação e aventura nos games",
+        descricao: "Uma composição inspirada em grandes personagens de jogos de luta.",
+        alt: "Personagens de anime em um cenário de batalha."
+      },
+      {
+        arquivo: "cripto-bitcoin-dolar.png",
+        tema: "cripto",
+        categoria: "Cripto",
+        titulo: "Bitcoin e moedas digitais",
+        descricao: "Uma imagem para iniciar os estudos sobre criptoativos e economia digital.",
+        alt: "Moedas de Bitcoin sobrepostas a notas de dólar."
+      },
+      {
+        arquivo: "cripto-moeda.jpg",
+        tema: "cripto",
+        categoria: "Cripto",
+        titulo: "O que é Bitcoin?",
+        descricao: "Bitcoin é um ativo digital que funciona em uma rede descentralizada.",
+        alt: "Símbolo do Bitcoin em destaque sobre um fundo verde luminoso."
+      },
+      {
+        arquivo: "cripto-mercado.png",
+        tema: "cripto",
+        categoria: "Cripto",
+        titulo: "Entendendo o mercado",
+        descricao: "Preços podem variar bastante. Esta imagem é uma referência visual, não uma cotação.",
+        alt: "Símbolo do Bitcoin diante de gráficos de mercado ilustrativos."
+      },
+      {
+        arquivo: "perfil.jpg",
+        tema: "pessoal",
+        categoria: "Pessoal",
+        titulo: "Um espaço com a sua identidade",
+        descricao: "Uma foto pessoal deixa a página mais próxima de quem você é.",
+        alt: "Retrato de uma pessoa usando boné e camisa vermelha."
+      }
+    ];
+
+    // O carrossel trabalha com uma lista filtrada sem alterar a coleção original.
+    let imagensVisiveis = [...imagens];
+    let indiceAtual = 0;
+
+    const imagemSlide = document.querySelector("#imagem-slide");
+    const etiquetaSlide = document.querySelector("#etiqueta-slide");
+    const tituloSlide = document.querySelector("#titulo-slide");
+    const descricaoSlide = document.querySelector("#descricao-slide");
+    const indicadores = document.querySelector("#indicadores");
+    const miniaturas = document.querySelector("#miniaturas");
+    const numeroAtual = document.querySelector("#numero-atual");
+    const totalImagens = document.querySelector("#total-imagens");
+
+    // Monta botões de navegação e miniaturas a partir da lista atual.
+    function montarNavegacao() {
+      indicadores.replaceChildren();
+      miniaturas.replaceChildren();
+      totalImagens.textContent = String(imagensVisiveis.length).padStart(2, "0");
+
+      imagensVisiveis.forEach((imagem, indice) => {
+        const indicador = document.createElement("button");
+        indicador.className = "indicador";
+        indicador.type = "button";
+        indicador.setAttribute("aria-label", `Ver imagem ${indice + 1}: ${imagem.titulo}`);
+        indicador.addEventListener("click", () => mostrarImagem(indice));
+        indicadores.append(indicador);
+
+        const miniatura = document.createElement("button");
+        const visualizacao = document.createElement("img");
+        const nome = document.createElement("span");
+
+        miniatura.className = "miniatura";
+        miniatura.type = "button";
+        miniatura.setAttribute("aria-label", `Ver imagem: ${imagem.titulo}`);
+        visualizacao.src = `imagens/${imagem.arquivo}`;
+        visualizacao.alt = "";
+        visualizacao.loading = "lazy";
+        nome.textContent = imagem.titulo;
+        miniatura.append(visualizacao, nome);
+        miniatura.addEventListener("click", () => mostrarImagem(indice));
+        miniaturas.append(miniatura);
+      });
+
+      mostrarImagem(indiceAtual);
+    }
+
+    // Atualiza o conteúdo do slide e destaca a miniatura correspondente.
+    function mostrarImagem(indice) {
+      if (imagensVisiveis.length === 0) return;
+
+      indiceAtual = (indice + imagensVisiveis.length) % imagensVisiveis.length;
+      const imagem = imagensVisiveis[indiceAtual];
+
+      imagemSlide.src = `imagens/${imagem.arquivo}`;
+      imagemSlide.alt = imagem.alt;
+      etiquetaSlide.textContent = imagem.categoria;
+      tituloSlide.textContent = imagem.titulo;
+      descricaoSlide.textContent = imagem.descricao;
+      numeroAtual.textContent = String(indiceAtual + 1).padStart(2, "0");
+
+      // Atualiza os estados acessíveis e visuais dos indicadores e miniaturas.
+      [...indicadores.children].forEach((botao, posicao) => {
+        botao.setAttribute("aria-current", String(posicao === indiceAtual));
+      });
+      [...miniaturas.children].forEach((botao, posicao) => {
+        botao.setAttribute("aria-current", String(posicao === indiceAtual));
+      });
+    }
+
+    // As setas percorrem a lista filtrada e voltam ao início quando chegam ao final.
+    document.querySelector("#anterior").addEventListener("click", () => {
+      mostrarImagem(indiceAtual - 1);
+    });
+    document.querySelector("#proximo").addEventListener("click", () => {
+      mostrarImagem(indiceAtual + 1);
+    });
+
+    // Ao escolher uma categoria, o carrossel mostra somente imagens daquele tema.
+    document.querySelectorAll(".filtro").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        const categoria = botao.dataset.categoria;
+        imagensVisiveis = categoria === "todas"
+          ? [...imagens]
+          : imagens.filter((imagem) => imagem.tema === categoria);
+        indiceAtual = 0;
+
+        document.querySelectorAll(".filtro").forEach((filtro) => {
+          filtro.setAttribute("aria-pressed", String(filtro === botao));
+        });
+
+        montarNavegacao();
+      });
+    });
+
+    // As teclas de seta permitem navegar sem usar o mouse.
+    document.addEventListener("keydown", (evento) => {
+      if (evento.target instanceof HTMLTextAreaElement) return;
+      if (evento.key === "ArrowLeft") mostrarImagem(indiceAtual - 1);
+      if (evento.key === "ArrowRight") mostrarImagem(indiceAtual + 1);
+    });
+
+    // O gesto de arrastar torna a navegação mais natural em celulares e tablets.
+    let inicioToque = null;
+    const areaCarrossel = document.querySelector(".carrossel");
+    areaCarrossel.addEventListener("touchstart", (evento) => {
+      inicioToque = evento.changedTouches[0].clientX;
+    }, { passive: true });
+    areaCarrossel.addEventListener("touchend", (evento) => {
+      if (inicioToque === null) return;
+      const distancia = evento.changedTouches[0].clientX - inicioToque;
+      if (Math.abs(distancia) > 45) {
+        mostrarImagem(indiceAtual + (distancia < 0 ? 1 : -1));
+      }
+      inicioToque = null;
+    }, { passive: true });
+
+    // As observações são guardadas localmente; nenhum dado é enviado para um servidor.
+    const campoAnotacoes = document.querySelector("#anotacoes");
+    const estadoAnotacoes = document.querySelector("#estado-anotacoes");
+
+    try {
+      campoAnotacoes.value = localStorage.getItem("meu-universo-observacoes") || "";
+    } catch (erro) {
+      estadoAnotacoes.textContent = "Não foi possível carregar as anotações salvas.";
+      console.error("Erro ao carregar as anotações:", erro);
+    }
+
+    campoAnotacoes.addEventListener("input", () => {
+      try {
+        localStorage.setItem("meu-universo-observacoes", campoAnotacoes.value);
+        estadoAnotacoes.textContent = "Anotações salvas neste navegador.";
+      } catch (erro) {
+        estadoAnotacoes.textContent = "Não foi possível salvar. Verifique o espaço disponível.";
+        console.error("Erro ao salvar as anotações:", erro);
+      }
+    });
+
+    // Exibe o primeiro slide e cria os controles assim que a página é carregada.
+    montarNavegacao();
+  </script>
+</body>
+</html>
